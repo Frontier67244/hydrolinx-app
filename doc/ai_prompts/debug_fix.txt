@@ -1,0 +1,35 @@
+=== TEMPLATE: DEBUG / FIX BUG ===
+
+Pakai template ini saat stuck dengan error (crash, compile error, UI glitch).
+
+---
+
+Context singkat (isi sebelum kirim):
+- File yang error: <path>
+- Gejala: <apa yang terjadi vs apa yang seharusnya>
+- Trigger: <cara reproduce — step by step>
+- Stack trace / compiler error: <paste>
+
+Constraint:
+- 100% Compose, no XML.
+- No Hilt/Koin — pakai HydrolinkApplication.repository.
+- LocalRepository interface, bukan Impl.
+- Jangan tambah library baru.
+- Jangan tambah Utils.kt / Helpers.kt / Common.kt.
+- Istilah baku: EXPLORE, Ml, poin, token, MINUM, REDEEM, SCAN.
+
+Task:
+1. Identifikasi root cause (1-2 kalimat).
+2. Propose fix paling minimal — no refactor besar-besaran.
+3. Jika error di imports, tulis import yang benar eksplisit (perhatikan: `CameraPosition` dari com.google.android.gms.maps.model, bukan maps-compose).
+4. Jika error coroutine (cancellation, race), pakai Job reference + cancel sebelum start baru.
+5. Jika error state update, cek pola unidirectional — harus lewat onEvent, bukan langsung mutate.
+6. Jika error Compose recomposition, cek `key`, `remember`, `derivedStateOf`.
+
+Output:
+- Root cause: <isi>
+- Fix: <diff atau snippet untuk ganti>
+- Verifikasi: <cara test fix>
+- Jika ada potential side effects: <warning>
+
+Kalau root cause tidak jelas dari info yang ada, **tanya balik** (bukan asumsi).

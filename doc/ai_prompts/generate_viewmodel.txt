@@ -1,0 +1,47 @@
+=== TEMPLATE: GENERATE VIEWMODEL ===
+
+Pakai template ini saat bikin atau refactor ViewModel.
+
+---
+
+Baca dulu: hydrolink-app/CODING_CONVENTIONS.md, ARCHITECTURE.md bagian Manual DI, dan modules/<nama>.md.
+
+Task: Bikin `<Nama>ViewModel` di `app/src/main/java/com/mahendra/android/hydrolink/feature/<nama>/viewmodel/<Nama>ViewModel.kt`.
+
+Kontrak kelas:
+- Nama kelas `<Nama>ViewModel`, extend `ViewModel` dari androidx.lifecycle.
+- Satu parameter constructor: `repository` bertipe `LocalRepository` (interface, bukan impl).
+- Expose satu `StateFlow<<Nama>UiState>` bernama `uiState`, dibacking oleh `MutableStateFlow` privat dengan default `<Nama>UiState()`.
+- Satu fungsi publik `onEvent(event: <Nama>Event)` yang pattern-match tiap varian event.
+
+Aturan WAJIB:
+1. Inisialisasi awal dikerjakan di blok `init`. Load data awal dari repository dan (bila perlu) observe Flow yang relevan.
+2. Semua coroutine diluncurkan dari `viewModelScope`. Tidak ada `GlobalScope` dan tidak ada `runBlocking`.
+3. Akses data hanya lewat repository (suspend function atau Flow). Tidak boleh import DAO, Database, atau Context.
+4. Business rules (perhitungan cap, overflow, target, radius) delegasi ke class di `logic/`. Jangan hardcode angka di ViewModel.
+5. Kalau ada long-running job yang bisa di-restart (contoh: scan radius bertahap di Maps), simpan reference `Job` sebagai property privat. Sebelum start job baru, cancel job lama.
+6. Error dari repository minimal di-log ke Logcat. Jangan pakai `runCatching` tanpa handling.
+
+Import yang dibutuhkan (referensi, bukan code):
+- `androidx.lifecycle.ViewModel` dan `androidx.lifecycle.viewModelScope`.
+- `kotlinx.coroutines.flow` untuk `MutableStateFlow`, `StateFlow`, `asStateFlow`, `update`, dan collector.
+- `kotlinx.coroutines.launch`, serta `kotlinx.coroutines.Job` jika perlu cancel.
+- Tipe dari folder state/ dan logic/ modul yang bersangkutan.
+- Interface `LocalRepository`.
+
+Yang tidak boleh di-import:
+- Apapun dari paket `androidx.compose.*`.
+- Apapun dari paket `android.content` (Context, Intent) kecuali diwrap oleh repository.
+- Paket impl konkret seperti `LocalRepositoryImpl` atau `HydrolinkDatabase`.
+
+Pola penulisan ViewModel:
+1. Deklarasi `_uiState` (mutable, privat) dan `uiState` (read-only, publik).
+2. Blok `init` untuk load awal dan launch collector Flow.
+3. Fungsi `onEvent` sebagai satu-satunya entry point dari UI.
+4. Fungsi privat per aksi (misal `redeem()`, `addSession(ml)`, `startScan()`) yang dipanggil dari `onEvent`.
+
+Setelah selesai, verifikasi:
+- Tidak ada import Compose di file VM.
+- Tidak ada import Context langsung.
+- Semua angka aturan bisnis datang dari class di folder logic/, bukan literal di VM.
+- State hanya berubah lewat `_uiState.update { ... }` atau assignment, tidak dari luar kelas.

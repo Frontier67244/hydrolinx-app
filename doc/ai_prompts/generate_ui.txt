@@ -1,0 +1,34 @@
+=== TEMPLATE: GENERATE UI SCREEN / COMPOSABLE ===
+
+Pakai template ini saat minta AI bikin atau edit file Composable.
+
+---
+
+Baca dulu: hydrolink-app/CODING_CONVENTIONS.md dan hydrolink-app/modules/<nama>.md.
+
+Task: Bikin composable `<NamaComposable>` di `app/src/main/java/com/mahendra/android/hydrolink/feature/<nama>/ui/<NamaComposable>.kt`.
+
+Kontrak:
+- Composable menerima dua parameter: sebuah UiState (tipe `<Nama>UiState` dari folder state/) dan sebuah callback event bertipe lambda dari `<Nama>Event` ke Unit.
+- Composable tidak memegang business state sendiri. Semua state sumbernya UiState. Semua aksi user dikirim lewat callback event.
+
+Aturan WAJIB:
+1. Stateless composable. Terima state + onEvent callback.
+2. Pakai Material3 default: Button, Card, ModalBottomSheet, Slider, FilterChip, NavigationBar, Scaffold.
+3. Pakai warna dari core/ui/theme/Color.kt. Warna utama brand cyan dengan hex #21BEDC, referensikan sebagai `HydrolinkCyan`.
+4. Border card standar: ketebalan 1.25dp warna HydrolinkCyan, shape rounded corner 16dp.
+5. Padding konsisten 20dp horizontal untuk konten utama layar.
+6. Copy UI pakai istilah baku: EXPLORE, Ml, poin, token, MINUM, REDEEM, SCAN. Hindari kapitalisasi atau terjemahan lain (lihat CODING_CONVENTIONS §9).
+7. Observe StateFlow pakai `collectAsStateWithLifecycle()`, bukan `collectAsState()`.
+8. Jangan hold state di composable kecuali ephemeral UI (scroll position, focus state, remember saveable untuk config change).
+9. Tambahkan satu annotation `@Preview` per composable publik, dengan dummy state yang masuk akal. Preview di-wrap oleh `HydrolinkTheme`.
+
+Struktur file:
+- Satu composable publik utama bernama `<NamaComposable>`.
+- Opsional: beberapa composable privat sebagai sub-komponen (Header, Card, Sheet, Row).
+- Satu fungsi Preview privat di bawah.
+
+Batasan ukuran:
+- File root screen < 200 baris. Kalau lebih, pecah ke sub-composable di file terpisah.
+
+Setelah selesai, lapor: path file yang dibuat + deskripsi Preview state yang dipakai.

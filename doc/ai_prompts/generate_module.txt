@@ -1,0 +1,30 @@
+=== TEMPLATE: GENERATE MODULE (end-to-end file set) ===
+
+Pakai template ini saat minta AI bikin satu module lengkap (state + viewmodel + screen).
+Ganti yang di `<...>` dengan nilai aktual.
+
+---
+
+Baca dulu: hydrolink-app/README.md, ARCHITECTURE.md, CODING_CONVENTIONS.md, dan modules/<nama>.md.
+
+Task: Generate module `<nama>` sesuai spec di modules/<nama>.md.
+
+Buat file berikut (di path eksak):
+- app/src/main/java/com/mahendra/android/hydrolink/feature/<nama>/state/<Nama>UiState.kt
+- app/src/main/java/com/mahendra/android/hydrolink/feature/<nama>/state/<Nama>Event.kt
+- app/src/main/java/com/mahendra/android/hydrolink/feature/<nama>/viewmodel/<Nama>ViewModel.kt
+- app/src/main/java/com/mahendra/android/hydrolink/feature/<nama>/ui/<Nama>Screen.kt
+- app/src/main/java/com/mahendra/android/hydrolink/feature/<nama>/logic/<NamaLogic>.kt  (jika module butuh business logic)
+
+Aturan WAJIB (jangan dilanggar):
+1. Pola state/event unidirectional — lihat CODING_CONVENTIONS §3.
+2. Manual DI via HydrolinkApplication.repository — no Hilt.
+3. ViewModel depend ke LocalRepository interface, bukan Impl.
+4. Logic/ dan state/ pure Kotlin, no Compose/Android imports.
+5. Copy constant dari logic class (RedeemRules / HydrationRules / ScanAlgorithm) — jangan hardcode angka.
+6. Copy UI string pakai istilah baku: EXPLORE, Ml, poin, token, MINUM, REDEEM, SCAN.
+7. File root screen <200 baris. Pecah sub-composable jika lebih.
+
+Jika butuh method baru di LocalRepository, update interface + impl bareng.
+
+Setelah generate, konfirmasi dengan list file yang dibuat + 1-liner per file.

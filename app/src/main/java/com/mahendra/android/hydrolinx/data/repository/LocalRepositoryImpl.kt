@@ -72,6 +72,22 @@ class LocalRepositoryImpl(
     override fun observePointWallet(): Flow<PointWalletEntity> =
         pointWalletDao.observeSingleton().map { it ?: PointWalletEntity() }
 
+    override suspend fun ensureDemoPointWalletSeeded() {
+        val current = pointWalletDao.getSingleton()
+        val shouldSeed = current == null ||
+            (
+                current.totalRedeem == 0 &&
+                    current.activePoints == 0 &&
+                    current.bankPoints == 0 &&
+                    current.tokenCount == 0 &&
+                    current.lastRedeemDateIso == null
+                )
+
+        if (shouldSeed) {
+            pointWalletDao.upsert(PointWalletEntity(activePoints = DEMO_INITIAL_POINTS))
+        }
+    }
+
     override suspend fun addPoints(amount: Int) {
         if (amount <= 0) return
         val current = pointWalletDao.getSingleton() ?: PointWalletEntity()
@@ -126,5 +142,6 @@ class LocalRepositoryImpl(
         private const val DAILY_ACTIVE_POINT_CAP = 100
         private const val BANK_POINT_CAP = 300
         private const val DAILY_TOKEN_CAP = 1
+        private const val DEMO_INITIAL_POINTS = 100
     }
 }

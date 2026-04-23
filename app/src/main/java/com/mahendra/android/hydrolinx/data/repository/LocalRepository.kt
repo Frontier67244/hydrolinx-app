@@ -26,6 +26,7 @@ interface LocalRepository {
 
     // Points
     fun observePointWallet(): Flow<PointWalletEntity>
+    suspend fun ensureDemoPointWalletSeeded()
     suspend fun addPoints(amount: Int)
     suspend fun applyRedeem(
         newActive: Int,

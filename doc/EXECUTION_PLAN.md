@@ -177,7 +177,7 @@ Fix bug critical. Kalau API key error, cek file properties lokal.
 ### Checkpoint Fase 1
 
 - [ ] Map render dengan blue dot user location
-- [ ] EXPLORE memicu animasi lingkaran ekspansi
+- [ ] EXPLORE memicu animasi lingkaran ekspansi/Users/henxyou/Desktop/Tangkapan Layar 2026-04-23 pukul 13.44.24.png
 - [ ] Pin muncul saat scan menemukan hit
 - [ ] Tap pin menampilkan popup
 - [ ] Tap DETAIL menampilkan sheet dengan alamat
@@ -191,7 +191,7 @@ Baca lengkap `modules/hydration.md` sebelum mulai.
 
 ### 2.1 Logic Constants, State, Event (03:00 – 03:15)
 
-- `feature/hydration/logic/HydrationRules.kt` — object Kotlin berisi konstanta target (min 1500, max 2500, step 100, default 2000), konstanta Ml per gelas (100), maksimal jumlah gelas, daftar ukuran minum (100, 250, 350), fungsi konversi Ml ke poin, dan fungsi konversi target ke jumlah gelas
+- `feature/hydration/logic/HydrationRules.kt` — object Kotlin berisi konstanta target (min 1800, max 2500, step 100, default 2000), konstanta Ml per gelas (100), maksimal jumlah gelas, daftar ukuran minum (100, 250, 350), fungsi konversi Ml ke poin, dan fungsi konversi target ke jumlah gelas
 - `feature/hydration/state/HydrationUiState.kt` — data class dengan field state Hydration (lihat tabel di `modules/hydration.md`)
 - `feature/hydration/state/HydrationEvent.kt` — sealed interface dengan event Hydration
 
